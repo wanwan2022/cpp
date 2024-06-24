@@ -51,3 +51,47 @@ void Func(char str[100]) {
 
 //如果您想在函数内部获取传入数组的大小，您可以考虑使用另一个参数来传递数组的大小，或者使用标准库中的 `std::array` 或 `std::vector`，它们提供了获取大小的方法。
 
+struct MyStructA {
+  int a;
+  double b;
+  char c;
+};
+struct MyStructB {
+  double b;
+  int a;
+  char c;
+};
+struct EmptyStruct {};
+void testArr(int arr[]) { cout << sizeof(arr) << endl; }
+void testMemoryAlignment() {
+  cout << "指针的大小永远是固定的，取决于处理器位数，32位就是 4 字节，64位就是 "
+          "8 字节"
+       << endl;
+  cout << sizeof(int *) << endl;    // 8
+  cout << sizeof(double *) << endl; // 8
+  cout << endl;
+
+  cout << "数组作为函数参数时会退化为指针，大小要按指针的计算" << endl;
+  int arr[10];
+  cout << sizeof(arr) << endl; // 40 = 4 * 10
+  testArr(arr);                // 8
+  cout << endl;
+
+  cout << "struct 结构体要考虑字节对齐" << endl;
+  cout << sizeof(int) << endl;    // 4
+  cout << sizeof(double) << endl; // 8
+  cout << sizeof(char) << endl;   // 1
+  cout << sizeof(MyStructA)
+       << endl; // 24 ，按 8 对齐，第一个是 4，不够 8，补齐为 8，第二个是
+                // 8，第三个是 1，不够 8，补齐为 8，所以是24
+  cout << sizeof(MyStructB)
+       << endl; // 16 ，按 8 对齐，第一个是 8，第二个是 4，不够 8，第三个是
+                // 1，可以拿过来补齐，所以是 16
+
+  cout << endl;
+  cout << sizeof(EmptyStruct) << endl; // 1
+  cout << "字符串数组要算上末尾的 '\\0'" << endl;
+  char chArr[] = "hello";
+  cout << sizeof(chArr) << endl; // 6
+};
+
